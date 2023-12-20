@@ -1,7 +1,7 @@
 {
   "name": "drupal-ambientimpact-block",
   "version": "2.0.0",
-  "license": "GPL-2.0",
+  "license": "GPL-2.0-or-later",
   "repository": "github:Ambient-Impact/drupal-ambientimpact-block",
   "scripts": {
     "build": "webpack --progress --config webpack.config.js"
