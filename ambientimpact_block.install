@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Add Bluesky to the social link block configuration if not present.
+ */
+function ambientimpact_block_update_9201(): void {
+
+  $config = \Drupal::service('config.factory')->getEditable(
+    'ambientimpact_block.social_links',
+  );
+
+  if ($config->get('networks.bluesky') !== null) {
+    return;
+  }
+
+  $networks = $config->get('networks');
+
+  if (!is_array($networks)) {
+    return;
+  }
+
+  $networks['bluesky'] = ['title' => 'Bluesky'];
+
+  $config->set('networks', $networks)->save(true);
+
+  // Delete the cached config so that Drupal starts using the new config. Note
+  // that invalidating this cache ID doesn't seem to do it for whatever reason,
+  // so we have to actually delete it.
+  \Drupal::cache('config')->delete('ambientimpact_block.social_links');
+
+}
