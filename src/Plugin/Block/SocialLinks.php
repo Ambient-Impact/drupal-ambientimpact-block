@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\ambientimpact_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
@@ -359,7 +361,7 @@ class SocialLinks extends BlockBase implements BlockPluginInterface {
 
     // Don't validate if field is empty as we fill it with the default string if
     // so.
-    if (!empty(trim($linkTextValue))) {
+    if (!empty(trim((string) $linkTextValue))) {
       // Require the '@pronoun' tag.
       if (strpos($linkTextValue, '@pronoun') === false) {
         $formState->setErrorByName(
@@ -378,7 +380,7 @@ class SocialLinks extends BlockBase implements BlockPluginInterface {
 
     // Don't validate if field is empty as we fill it with the default string if
     // so.
-    if (!empty(trim($linkAccessibilityTextValue))) {
+    if (!empty(trim((string) $linkAccessibilityTextValue))) {
       // Require the '@network' tag.
       if (strpos($linkAccessibilityTextValue, '@network') === false) {
         $formState->setErrorByName(
