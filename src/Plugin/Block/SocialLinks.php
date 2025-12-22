@@ -6,7 +6,9 @@ namespace Drupal\ambientimpact_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\SortArray;
 
@@ -73,6 +75,8 @@ class SocialLinks extends BlockBase implements BlockPluginInterface {
       // this in too many places.
       '#base_class' => 'ambientimpact-social-links',
 
+      '#attributes' => new Attribute(),
+
       // Attach assets.
       '#attached'   => [
         'library'   => ['ambientimpact_block/component.social_links'],
@@ -132,14 +136,16 @@ class SocialLinks extends BlockBase implements BlockPluginInterface {
         ];
       }
 
-      // Title attribute for the link, displayed as a tooltip. Contains full
-      // text.
-      $network['titleAttribute'] = $this->t(
+      $network['item_attributes'] = new Attribute();
+
+      $network['link_attributes'] = new Attribute();
+
+      $network['link_attributes']->setAttribute('title', $this->t(
         $blockConfig['link_text'], [
           '@pronoun'            => $blockConfig['link_text_pronoun'],
           '@accessibilitytext'  => $networkAccessibilityContent,
-        ]
-      );
+        ],
+      ));
 
       // Set the icon text as visually hidden if the block is set to display
       // only icons and no text.
@@ -424,4 +430,26 @@ class SocialLinks extends BlockBase implements BlockPluginInterface {
 
     $this->setConfigurationValue('social_links', $savedValues);
   }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return Cache::PERMANENT;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+
+    return Cache::mergeTags(parent::getCacheTags(), [
+      'block_view:' . $this->getPluginId(),
+      'config:ambientimpact_block.social_links',
+      'config:ambientimpact_block.social_links_network',
+    ]);
+
+  }
+
 }
