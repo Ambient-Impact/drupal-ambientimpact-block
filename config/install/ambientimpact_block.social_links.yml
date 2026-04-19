@@ -27,6 +27,8 @@ networks:
     title: 'YouTube'
   steam:
     title: 'Steam'
+  codeberg:
+    title: 'Codeberg'
   github:
     title: 'GitHub'
   gitlab:

@@ -46,3 +46,33 @@ function ambientimpact_block_update_9202(): void {
   \Drupal::service('cache_tags.invalidator')->invalidateTags(['block_view']);
 
 }
+
+/**
+ * Add Codeberg to the social link block configuration if not present.
+ */
+function ambientimpact_block_update_9203(): void {
+
+  $config = \Drupal::service('config.factory')->getEditable(
+    'ambientimpact_block.social_links',
+  );
+
+  if ($config->get('networks.codeberg') !== null) {
+    return;
+  }
+
+  $networks = $config->get('networks');
+
+  if (!is_array($networks)) {
+    return;
+  }
+
+  $networks['codeberg'] = ['title' => 'Codeberg'];
+
+  $config->set('networks', $networks)->save(true);
+
+  // Delete the cached config so that Drupal starts using the new config. Note
+  // that invalidating this cache ID doesn't seem to do it for whatever reason,
+  // so we have to actually delete it.
+  \Drupal::cache('config')->delete('ambientimpact_block.social_links');
+
+}
