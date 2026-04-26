@@ -76,3 +76,48 @@ function ambientimpact_block_update_9203(): void {
   \Drupal::cache('config')->delete('ambientimpact_block.social_links');
 
 }
+
+/**
+ * Add Ko-fi & Liberapay to the social links block configuration if not present.
+ */
+function ambientimpact_block_update_9204(): void {
+
+  $config = \Drupal::service('config.factory')->getEditable(
+    'ambientimpact_block.social_links',
+  );
+
+  $updated = false;
+
+  $networks = $config->get('networks');
+
+  if (!is_array($networks)) {
+    return;
+  }
+
+  foreach ([
+    'kofi'      => 'Ko-fi',
+    'liberapay' => 'Liberapay',
+  ] as $key => $title) {
+
+    if (!empty($networks[$key])) {
+      continue;
+    }
+
+    $networks[$key] = ['title' => $title];
+
+    $updated = true;
+
+  }
+
+  if ($updated === false) {
+    return;
+  }
+
+  $config->set('networks', $networks)->save(true);
+
+  // Delete the cached config so that Drupal starts using the new config. Note
+  // that invalidating this cache ID doesn't seem to do it for whatever reason,
+  // so we have to actually delete it.
+  \Drupal::cache('config')->delete('ambientimpact_block.social_links');
+
+}

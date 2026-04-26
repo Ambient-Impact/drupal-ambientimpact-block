@@ -35,6 +35,10 @@ networks:
     title: 'GitLab'
   tumblr:
     title: 'Tumblr'
+  kofi:
+    title: 'Ko-fi'
+  liberapay:
+    title: 'Liberapay'
 
 # This is only here for the translation system; it's not saved to the block
 # instance config as that is already set by Drupal.
