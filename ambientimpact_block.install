@@ -48,7 +48,7 @@ function ambientimpact_block_update_9202(): void {
 }
 
 /**
- * Add Codeberg to the social link block configuration if not present.
+ * Add Codeberg to the social links block configuration if not present.
  */
 function ambientimpact_block_update_9203(): void {
 
